@@ -1,6 +1,4 @@
 import { useRouteError } from "react-router-dom";
-import Intro from "../components/Elements/Intro";
-import AuthLayout from "../components/Layouts/AuthLayout";
 
 const ErrorPage = () => {
   const error = useRouteError();
