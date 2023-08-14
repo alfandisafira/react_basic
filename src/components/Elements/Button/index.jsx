@@ -13,7 +13,7 @@ const Button = (props) => {
       <button
         className={`w-full h-10 px-6 font-medium rounded-md mt-2 ${bgColor} ${textColor}`}
         type={type}
-        onClick={onClick()}>
+        onClick={onClick}>
         {props.children}
       </button>
     </div>
