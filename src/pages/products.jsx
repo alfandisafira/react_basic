@@ -1,4 +1,6 @@
 import CardProduct from "../components/Fragments/CardProduct";
+import Counter from "../components/Fragments/Counter";
+
 import Button from "../components/Elements/Button";
 
 const products = [
@@ -61,6 +63,7 @@ const ProductPage = () => {
           </CardProduct>
         ))}
       </div>
+      <Counter />
     </div>
   );
 };
