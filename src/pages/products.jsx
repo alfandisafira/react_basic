@@ -1,4 +1,5 @@
 import CardProduct from "../components/Fragments/CardProduct";
+import Button from "../components/Elements/Button";
 
 const products = [
   {
@@ -28,8 +29,25 @@ const products = [
 ];
 
 const ProductPage = () => {
+  const user = localStorage.getItem("email");
+  const handleLogout = () => {
+    localStorage.removeItem("email");
+    localStorage.removeItem("password");
+    window.location.href = "/login";
+  };
   return (
     <div className="min-h-screen bg-cyan-500">
+      {user && (
+        <div className="bg-white px-4 pb-2 flex justify-end items-center gap-4">
+          <h5 className="font-medium pt-2">{user}</h5>
+          <Button
+            bgColor="bg-slate-900 hover:bg-slate-300"
+            textColor="text-slate-100 hover:text-slate-900"
+            onClick={() => handleLogout}>
+            Sign out
+          </Button>
+        </div>
+      )}
       <div className="flex justify-center gap-4">
         {products.map((product) => (
           <CardProduct key={product.id}>

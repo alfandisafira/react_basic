@@ -35,7 +35,11 @@ const Footer = (props) => {
   return (
     <div className="flex justify-between items-center">
       <h5 className="font-semibold pt-2">{price}</h5>
-      <Button bgColor="bg-slate-900 hover:bg-slate-500">Buy now</Button>
+      <Button
+        bgColor="bg-slate-900 hover:bg-slate-300"
+        textColor="text-slate-100 hover:text-slate-900">
+        Buy now
+      </Button>
     </div>
   );
 };
