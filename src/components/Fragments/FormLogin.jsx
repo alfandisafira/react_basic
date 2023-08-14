@@ -4,10 +4,16 @@ import Button from "../Elements/Button";
 
 const FormLogin = (props) => {
   const { action, method } = props;
+  const handleLogin = (e) => {
+    e.preventDefault();
+    localStorage.setItem("email", e.target.email.value);
+    localStorage.setItem("password", e.target.password.value);
+    window.location.href = "/products";
+  };
   return (
     <>
       <Intro title="Sign in">Login to manage your account</Intro>
-      <form action={action} method={method}>
+      <form onSubmit={handleLogin}>
         <InputForm
           name="email"
           label="Email"
@@ -22,7 +28,9 @@ const FormLogin = (props) => {
           type="password"
           placeholder="******"
         />
-        <Button bgColor="bg-slate-900 hover:bg-slate-500">Sign in</Button>
+        <Button bgColor="bg-slate-900 hover:bg-slate-500" type="submit">
+          Sign in
+        </Button>
       </form>
     </>
   );

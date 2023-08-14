@@ -33,10 +33,12 @@ const ProductPage = () => {
       <div className="flex justify-center gap-4">
         {products.map((product) => (
           <CardProduct key={product.id}>
-            <CardProduct.Header imageSource={product.imageSource} />
-            <CardProduct.Body title={product.title}>
-              {product.description}
-            </CardProduct.Body>
+            <div>
+              <CardProduct.Header imageSource={product.imageSource} />
+              <CardProduct.Body title={product.title}>
+                {product.description}
+              </CardProduct.Body>
+            </div>
             <CardProduct.Footer price={product.price} />
           </CardProduct>
         ))}
