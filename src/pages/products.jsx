@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 import CardProduct from "../components/Fragments/CardProduct";
-// import Counter from "../components/Fragments/Counter";
+import Counter from "../components/Fragments/Counter";
 
 import Button from "../components/Elements/Button";
 
@@ -130,6 +130,9 @@ const ProductPage = () => {
             <h5 className="pl-2">Tidak ada item.</h5>
           )}
         </div>
+      </div>
+      <div className="flex justify-center">
+        <Counter />
       </div>
     </div>
   );
