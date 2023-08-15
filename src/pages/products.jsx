@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import CardProduct from "../components/Fragments/CardProduct";
-import Counter from "../components/Fragments/Counter";
+// import Counter from "../components/Fragments/Counter";
 
 import Button from "../components/Elements/Button";
 
@@ -41,6 +41,26 @@ const ProductPage = () => {
   };
 
   const [cart, setCart] = useState([]);
+  const [totalPrice, setTotalPrice] = useState(0);
+
+  // component did mount
+  useEffect(() => {
+    console.log("did mount");
+    setCart(JSON.parse(localStorage.getItem("cart")) || []);
+  }, []);
+
+  // component did update
+  useEffect(() => {
+    console.log("did update");
+    if (cart.length > 0) {
+      const sum = cart.reduce((acc, item) => {
+        const product = products.find((product) => product.id === item.id); // to get price beacuse cart only save id & qty
+        return acc + product.price * item.qty;
+      }, 0);
+      setTotalPrice(sum);
+      localStorage.setItem("cart", JSON.stringify(cart));
+    }
+  }, [cart]);
 
   const handleAddToCart = (id) => {
     if (cart.find((f) => f.id === id)) {
@@ -97,7 +117,7 @@ const ProductPage = () => {
                   <th>Title</th>
                   <th>Price</th>
                   <th>Qty</th>
-                  <th>Total Price</th>
+                  <th>Total</th>
                 </tr>
               </thead>
               <tbody>
@@ -124,6 +144,18 @@ const ProductPage = () => {
                     </tr>
                   );
                 })}
+                <tr>
+                  <th colSpan={3} className="text-left">
+                    Total Price
+                  </th>
+                  <td>
+                    Rp.{" "}
+                    {totalPrice.toLocaleString("id-ID", {
+                      styles: "currency",
+                      currency: "IDR",
+                    })}
+                  </td>
+                </tr>
               </tbody>
             </table>
           ) : (
@@ -131,9 +163,9 @@ const ProductPage = () => {
           )}
         </div>
       </div>
-      <div className="flex justify-center">
+      {/* <div className="flex justify-center">
         <Counter />
-      </div>
+      </div> */}
     </div>
   );
 };
