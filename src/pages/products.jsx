@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import CardProduct from "../components/Fragments/CardProduct";
 // import Counter from "../components/Fragments/Counter";
@@ -76,6 +76,25 @@ const ProductPage = () => {
     }
   };
 
+  // useRef
+  // 1. Sama seperti useEffect tapi tidak dirender, sebagai referensi value
+  const cartRef = useRef(JSON.parse(localStorage.getItem("cart")) || []);
+
+  const handleAddToCartRef = (id) => {
+    cartRef.current = [...cartRef.current, { id, qty: 1 }];
+    localStorage.setItem("cart", JSON.stringify(cartRef.current));
+  };
+
+  // 2. Sebagai DOM
+  const sectionCartRef = useRef(null);
+  console.log(sectionCartRef);
+
+  useEffect(() => {
+    cart.length > 0
+      ? (sectionCartRef.current.style.display = "block")
+      : (sectionCartRef.current.style.display = "none");
+  }, [cart]);
+
   return (
     <div className="min-h-screen bg-cyan-500">
       {user && (
@@ -107,7 +126,7 @@ const ProductPage = () => {
             </CardProduct>
           ))}
         </div>
-        <div className="py-4 px-2 w-min-content">
+        <div className="py-4 px-2 w-min-content" ref={sectionCartRef}>
           <h5 className="ml-2 font-semibold">Cart</h5>
 
           {cart.length > 0 ? (
