@@ -6,25 +6,22 @@ import Button from "../Elements/Button";
 
 import { login } from "../../services/auth.service";
 
-const FormLogin = (props) => {
-  const { action, method } = props;
+const FormLogin = () => {
   const [errorLogin, setErrorLogin] = useState(null);
 
   const handleLogin = (e) => {
     e.preventDefault();
-    // localStorage.setItem("email", e.target.email.value);
-    // localStorage.setItem("password", e.target.password.value);
-    // window.location.href = "/products";
     const data = {
       username: e.target.username.value,
       password: e.target.password.value,
     };
+
     login(data, (status, res) => {
       if (status) {
         localStorage.setItem("token", res.data.token);
         window.location.href = "/products";
       } else {
-        setErrorLogin(res);
+        setErrorLogin(res.response.data);
       }
     });
   };

@@ -1,29 +1,20 @@
 import { useEffect, useRef, useState } from "react";
 
 import CardProduct from "../components/Fragments/CardProduct";
-// import Counter from "../components/Fragments/Counter";
-import Button from "../components/Elements/Button";
+import Navbar from "../components/Fragments/Navbar";
 
 import { getProducts } from "../services/product.service";
-import { getUsername } from "../services/auth.service";
-
-const token = localStorage.getItem("token");
+import { useLogin } from "../hooks/useLogin";
 
 const ProductPage = () => {
-  const handleLogout = () => {
-    localStorage.clear();
-    window.location.href = "/login";
-  };
-
   const [cart, setCart] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0);
   const [products, setProducts] = useState([]);
-  const [user, setUser] = useState("");
+  const user = useLogin();
 
   // component did mount
   useEffect(() => {
     setCart(JSON.parse(localStorage.getItem("cart")) || []);
-    token ? setUser(getUsername(token)) : (window.location.href = "/login");
   }, []);
 
   // component did update
@@ -59,17 +50,7 @@ const ProductPage = () => {
 
   return (
     <div className="min-h-screen bg-cyan-500">
-      {user && (
-        <div className="bg-white px-4 pb-2 flex justify-end items-center gap-4">
-          <h5 className="font-medium pt-2">{user}</h5>
-          <Button
-            bgColor="bg-slate-900 hover:bg-slate-300"
-            textColor="text-slate-100 hover:text-slate-900"
-            onClick={() => handleLogout()}>
-            Sign out
-          </Button>
-        </div>
-      )}
+      {user && <Navbar user={user} />}
       <div className="flex gap-1">
         <div className="flex flex-wrap gap-2 px-2 w-3/4">
           {products.map((product) => (
@@ -97,7 +78,6 @@ const ProductPage = () => {
         </div>
         <div className="py-4 px-2 w-min-content w-1/4">
           <h5 className="ml-2 font-semibold">Cart</h5>
-
           {products.length > 0 && cart.length > 0 ? (
             <table className="text-xs border-separate border-spacing-2 border-0">
               <thead className="text-left">
