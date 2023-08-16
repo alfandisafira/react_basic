@@ -1,20 +1,37 @@
+import { useRef, useEffect, useState } from "react";
+
 import Intro from "../Elements/Intro";
 import InputForm from "../Elements/Input";
 import Button from "../Elements/Button";
-import { useRef, useEffect } from "react";
+
+import { login } from "../../services/auth.service";
 
 const FormLogin = (props) => {
   const { action, method } = props;
+  const [errorLogin, setErrorLogin] = useState(null);
+
   const handleLogin = (e) => {
     e.preventDefault();
-    localStorage.setItem("email", e.target.email.value);
-    localStorage.setItem("password", e.target.password.value);
-    window.location.href = "/products";
+    // localStorage.setItem("email", e.target.email.value);
+    // localStorage.setItem("password", e.target.password.value);
+    // window.location.href = "/products";
+    const data = {
+      username: e.target.username.value,
+      password: e.target.password.value,
+    };
+    login(data, (status, res) => {
+      if (status) {
+        localStorage.setItem("token", res.data.token);
+        window.location.href = "/products";
+      } else {
+        setErrorLogin(res);
+      }
+    });
   };
-  const emailRef = useRef(null);
+  const usernameRef = useRef(null);
 
   useEffect(() => {
-    emailRef.current.focus();
+    usernameRef.current.focus();
   }, []);
 
   return (
@@ -22,12 +39,12 @@ const FormLogin = (props) => {
       <Intro title="Sign in">Login to manage your account</Intro>
       <form onSubmit={handleLogin}>
         <InputForm
-          name="email"
-          label="Email"
-          id="email"
-          type="email"
-          placeholder="example@gmail.com"
-          ref={emailRef}
+          name="username"
+          label="Username"
+          id="username"
+          type="text"
+          placeholder="Input your username"
+          ref={usernameRef}
         />
         <InputForm
           name="password"
@@ -39,6 +56,9 @@ const FormLogin = (props) => {
         <Button bgColor="bg-slate-900 hover:bg-slate-500" type="submit">
           Sign in
         </Button>
+        {errorLogin && (
+          <p className="text-red-600 text-center mt-2">{errorLogin}</p>
+        )}
       </form>
     </>
   );

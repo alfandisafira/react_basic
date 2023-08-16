@@ -2,12 +2,14 @@ import { useEffect, useRef, useState } from "react";
 
 import CardProduct from "../components/Fragments/CardProduct";
 // import Counter from "../components/Fragments/Counter";
-
 import Button from "../components/Elements/Button";
-import { getProducts } from "../services/product.services";
+
+import { getProducts } from "../services/product.service";
+import { getUsername } from "../services/auth.service";
+
+const token = localStorage.getItem("token");
 
 const ProductPage = () => {
-  const user = localStorage.getItem("email");
   const handleLogout = () => {
     localStorage.clear();
     window.location.href = "/login";
@@ -16,10 +18,12 @@ const ProductPage = () => {
   const [cart, setCart] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0);
   const [products, setProducts] = useState([]);
+  const [user, setUser] = useState("");
 
   // component did mount
   useEffect(() => {
     setCart(JSON.parse(localStorage.getItem("cart")) || []);
+    token ? setUser(getUsername(token)) : (window.location.href = "/login");
   }, []);
 
   // component did update
