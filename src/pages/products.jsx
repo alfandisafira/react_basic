@@ -4,55 +4,27 @@ import CardProduct from "../components/Fragments/CardProduct";
 // import Counter from "../components/Fragments/Counter";
 
 import Button from "../components/Elements/Button";
-
-const products = [
-  {
-    id: 1,
-    title: "Macbook Pro M1",
-    price: 15000000,
-    description:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. In temporibus voluptatum quas iure minus, vel recusandae autem repudiandae magni atque facilis inventore, nesciunt corrupti officia? Mollitia laborum alias totam ipsam?",
-    imageSource: "/assets/images/91374.jpg",
-  },
-  {
-    id: 2,
-    title: "Asus Vivobook",
-    price: 7000000,
-    description:
-      "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Doloremque nemo sapiente est. Corrupti, aliquam sit!",
-    imageSource: "/assets/images/91374.jpg",
-  },
-  {
-    id: 3,
-    title: "Lenovo Legion",
-    price: 12000000,
-    description:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. In temporibus voluptatum quas iure minus, vel recusandae autem repudiandae magni atque facilis inventore, nesciunt corrupti officia? Mollitia laborum alias totam ipsam?",
-    imageSource: "/assets/images/91374.jpg",
-  },
-];
+import { getProducts } from "../services/product.services";
 
 const ProductPage = () => {
   const user = localStorage.getItem("email");
   const handleLogout = () => {
-    localStorage.removeItem("email");
-    localStorage.removeItem("password");
+    localStorage.clear();
     window.location.href = "/login";
   };
 
   const [cart, setCart] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0);
+  const [products, setProducts] = useState([]);
 
   // component did mount
   useEffect(() => {
-    console.log("did mount");
     setCart(JSON.parse(localStorage.getItem("cart")) || []);
   }, []);
 
   // component did update
   useEffect(() => {
-    console.log("did update");
-    if (cart.length > 0) {
+    if (products.length > 0 && cart.length > 0) {
       const sum = cart.reduce((acc, item) => {
         const product = products.find((product) => product.id === item.id); // to get price beacuse cart only save id & qty
         return acc + product.price * item.qty;
@@ -60,7 +32,12 @@ const ProductPage = () => {
       setTotalPrice(sum);
       localStorage.setItem("cart", JSON.stringify(cart));
     }
-  }, [cart]);
+  }, [cart, products]);
+
+  // get from API
+  useEffect(() => {
+    getProducts((data) => setProducts(data));
+  }, []);
 
   const handleAddToCart = (id) => {
     if (cart.find((f) => f.id === id)) {
@@ -76,25 +53,6 @@ const ProductPage = () => {
     }
   };
 
-  // useRef
-  // 1. Sama seperti useEffect tapi tidak dirender, sebagai referensi value
-  const cartRef = useRef(JSON.parse(localStorage.getItem("cart")) || []);
-
-  const handleAddToCartRef = (id) => {
-    cartRef.current = [...cartRef.current, { id, qty: 1 }];
-    localStorage.setItem("cart", JSON.stringify(cartRef.current));
-  };
-
-  // 2. Sebagai DOM
-  const sectionCartRef = useRef(null);
-  console.log(sectionCartRef);
-
-  useEffect(() => {
-    cart.length > 0
-      ? (sectionCartRef.current.style.display = "block")
-      : (sectionCartRef.current.style.display = "none");
-  }, [cart]);
-
   return (
     <div className="min-h-screen bg-cyan-500">
       {user && (
@@ -108,14 +66,21 @@ const ProductPage = () => {
           </Button>
         </div>
       )}
-      <div className="flex flex-wrap gap-1">
-        <div className="flex flex-wrap gap-2 px-2 w-6/8">
+      <div className="flex gap-1">
+        <div className="flex flex-wrap gap-2 px-2 w-3/4">
           {products.map((product) => (
             <CardProduct key={product.id}>
               <div>
-                <CardProduct.Header imageSource={product.imageSource} />
-                <CardProduct.Body title={product.title}>
-                  {product.description}
+                <CardProduct.Header
+                  imageSource={product.image}
+                  alt={product.title}
+                />
+                <CardProduct.Body
+                  title={`${product.title.substring(0, 20)}${
+                    product.title.length > 20 ? "..." : null
+                  }`}>
+                  {product.description.substring(0, 150)}
+                  {product.description.length > 150 ? "..." : null}
                 </CardProduct.Body>
               </div>
               <CardProduct.Footer
@@ -126,10 +91,10 @@ const ProductPage = () => {
             </CardProduct>
           ))}
         </div>
-        <div className="py-4 px-2 w-min-content" ref={sectionCartRef}>
+        <div className="py-4 px-2 w-min-content w-1/4">
           <h5 className="ml-2 font-semibold">Cart</h5>
 
-          {cart.length > 0 ? (
+          {products.length > 0 && cart.length > 0 ? (
             <table className="text-xs border-separate border-spacing-2 border-0">
               <thead className="text-left">
                 <tr>
@@ -144,9 +109,12 @@ const ProductPage = () => {
                   const product = products.find((p) => p.id === item.id);
                   return (
                     <tr key={product.id}>
-                      <td>{product.title}</td>
                       <td>
-                        Rp.{" "}
+                        {product.title.substring(0, 20)}
+                        {product.title.length > 20 ? "..." : null}
+                      </td>
+                      <td>
+                        ${" "}
                         {product.price.toLocaleString("id-ID", {
                           styles: "currency",
                           currency: "IDR",
@@ -154,7 +122,7 @@ const ProductPage = () => {
                       </td>
                       <td>{item.qty}</td>
                       <td>
-                        Rp.{" "}
+                        ${" "}
                         {(product.price * item.qty).toLocaleString("id-ID", {
                           styles: "currency",
                           currency: "IDR",
@@ -168,7 +136,7 @@ const ProductPage = () => {
                     Total Price
                   </th>
                   <td>
-                    Rp.{" "}
+                    ${" "}
                     {totalPrice.toLocaleString("id-ID", {
                       styles: "currency",
                       currency: "IDR",
@@ -182,9 +150,6 @@ const ProductPage = () => {
           )}
         </div>
       </div>
-      {/* <div className="flex justify-center">
-        <Counter />
-      </div> */}
     </div>
   );
 };

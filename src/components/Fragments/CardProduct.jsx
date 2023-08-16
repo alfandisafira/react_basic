@@ -10,11 +10,11 @@ const CardProduct = (props) => {
 };
 
 const Header = (props) => {
-  const { imageSource } = props;
+  const { imageSource, alt } = props;
   return (
     <div>
-      <a href="#">
-        <img className="rounded-md" src={imageSource} alt="" />
+      <a href={imageSource} target="_blank" className="flex justify-center">
+        <img className="rounded-md w-28 h-28" src={imageSource} alt={alt} />
       </a>
     </div>
   );
@@ -23,7 +23,7 @@ const Header = (props) => {
 const Body = (props) => {
   const { title, children } = props;
   return (
-    <div className="mt-4">
+    <div className="mt-4 text-center">
       <h5 className="text-xl font-semibold">{title}</h5>
       <p className="text-sm mt-1">{children}</p>
     </div>
@@ -35,7 +35,7 @@ const Footer = (props) => {
   return (
     <div className="flex justify-between items-center">
       <h5 className="font-semibold pt-2">
-        Rp.{" "}
+        ${" "}
         {price.toLocaleString("id-ID", { styles: "currency", currency: "IDR" })}
       </h5>
       <Button
