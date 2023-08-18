@@ -59,6 +59,7 @@ const ProductPage = () => {
                 <CardProduct.Header
                   imageSource={product.image}
                   alt={product.title}
+                  id={product.id}
                 />
                 <CardProduct.Body
                   title={`${product.title.substring(0, 20)}${

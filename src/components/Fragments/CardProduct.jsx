@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import Button from "../Elements/Button";
 
 const CardProduct = (props) => {
@@ -10,12 +11,12 @@ const CardProduct = (props) => {
 };
 
 const Header = (props) => {
-  const { imageSource, alt } = props;
+  const { imageSource, alt, id } = props;
   return (
     <div>
-      <a href={imageSource} target="_blank" className="flex justify-center">
+      <Link to={`/product/${id}`} className="flex justify-center">
         <img className="rounded-md w-28 h-28" src={imageSource} alt={alt} />
-      </a>
+      </Link>
     </div>
   );
 };
