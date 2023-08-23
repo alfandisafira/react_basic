@@ -23,9 +23,9 @@ const ProductDetailPage = () => {
     <div className="min-h-screen bg-cyan-500">
       {user && <Navbar user={user} />}
       {Object.keys(product).length > 0 && (
-        <div className="flex justify-center pt-20">
-          <div className="flex font-sans w-1/2">
-            <div className="flex relative w-1/3 items-center justify-center">
+        <div className="flex justify-center pt-20 ">
+          <div className="flex font-sans w-1/2 bg-zinc-200 bg-opacity-30 rounded-xl">
+            <div className="flex relative w-1/3 items-center justify-center pl-6">
               <img
                 src={product.image}
                 alt=""

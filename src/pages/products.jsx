@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 
 import CardProduct from "../components/Fragments/CardProduct";
 import Navbar from "../components/Fragments/Navbar";
@@ -6,9 +6,11 @@ import TableCart from "../components/Fragments/TableCart";
 
 import { getProducts } from "../services/product.service";
 import { useLogin } from "../hooks/useLogin";
+import { DarkMode } from "../context/DarkMode";
 
 const ProductPage = () => {
   const [products, setProducts] = useState([]);
+  const { isDarkMode } = useContext(DarkMode);
   useLogin();
 
   // get from API
@@ -17,7 +19,8 @@ const ProductPage = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-cyan-500">
+    <div
+      className={`min-h-screen ${isDarkMode ? "bg-gray-800" : "bg-cyan-500"}`}>
       <Navbar />
       <div className="flex gap-1">
         <div className="flex flex-wrap gap-2 px-2 w-3/4">
@@ -42,7 +45,12 @@ const ProductPage = () => {
           ))}
         </div>
         <div className="py-4 px-2 w-min-content w-1/4">
-          <h5 className="ml-2 font-semibold">Cart</h5>
+          <h5
+            className={`ml-2 font-semibold ${
+              isDarkMode ? "text-white" : "text-black"
+            }`}>
+            Cart
+          </h5>
           <TableCart products={products} />
         </div>
       </div>

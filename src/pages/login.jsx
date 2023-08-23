@@ -3,11 +3,9 @@ import AuthLayout from "../components/Layouts/AuthLayout";
 
 const LoginPage = () => {
   return (
-    <div className="min-h-screen bg-cyan-500">
-      <AuthLayout type={"login"}>
-        <FormLogin />
-      </AuthLayout>
-    </div>
+    <AuthLayout type={"login"}>
+      <FormLogin />
+    </AuthLayout>
   );
 };
 
