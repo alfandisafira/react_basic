@@ -5,12 +5,14 @@ import { useSelector } from "react-redux";
 
 import { useLogin } from "../../hooks/useLogin";
 import { DarkMode } from "../../context/DarkMode";
+import { useTotalPrice } from "../../context/TotalPriceContext";
 
 const Navbar = () => {
   const user = useLogin();
   const [totalCart, setTotalCart] = useState(0);
   const cart = useSelector((state) => state.cart.data);
   const { isDarkMode, setIsDarkMode } = useContext(DarkMode);
+  const { total } = useTotalPrice();
 
   useEffect(() => {
     const sum = cart.reduce((acc, item) => {
@@ -39,7 +41,7 @@ const Navbar = () => {
                 ? "https://cdn0.iconfinder.com/data/icons/phosphor-light-vol-4/256/sun-light-256.png"
                 : "https://cdn4.iconfinder.com/data/icons/music-ui-solid-24px/24/moon_dark_mode_night-2-256.png"
             }`}
-            alt="cartIcon"
+            alt="toggleIcon"
             width={15}
           />
         </Button>
@@ -50,6 +52,16 @@ const Navbar = () => {
             width={15}
           />
           <p className="font-semibold text-xs pb-4 pl-0.5">{totalCart}</p>
+        </div>
+        <div className="flex items-center bg-slate-100 p-1 mt-2 rounded-md">
+          <img
+            src="https://cdn0.iconfinder.com/data/icons/free-daily-icon-set/512/Dollar-512.png"
+            alt="totalIcon"
+            width={20}
+          />
+          <p className="font-semibold text-xs">
+            {total.toLocaleString("id-ID")}
+          </p>
         </div>
       </div>
       <div className="flex items-center gap-2">
