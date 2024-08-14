@@ -1,3 +1,5 @@
+import propTypes from "prop-types";
+
 const Intro = (props) => {
   const { title } = props;
   return (
@@ -6,6 +8,11 @@ const Intro = (props) => {
       <p className="text-sm font-light mb-2">{props.children}</p>
     </div>
   );
+};
+
+Intro.propTypes = {
+  title: propTypes.string,
+  children: propTypes.any,
 };
 
 export default Intro;
