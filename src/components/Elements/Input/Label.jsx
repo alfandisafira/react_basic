@@ -1,3 +1,5 @@
+import propTypes from "prop-types";
+
 const Label = (props) => {
   const { htmlFor } = props;
   return (
@@ -5,6 +7,11 @@ const Label = (props) => {
       {props.children}
     </label>
   );
+};
+
+Label.propTypes = {
+  htmlFor: propTypes.string,
+  children: propTypes.element,
 };
 
 export default Label;
